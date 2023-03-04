@@ -1,0 +1,7 @@
+@import './node_modules/bootstrap/scss/functions';
+
+// Import base stylings *after* map-merges
+
+@import './node_modules/bootstrap/scss/bootstrap';
+
+// Bootstrap overrides / extensions

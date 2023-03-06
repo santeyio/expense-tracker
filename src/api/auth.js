@@ -11,3 +11,17 @@ export function checkIfLoggedIn() {
     headers: { Authorization: `Token ${token}` },
   });
 }
+
+export function login(email, password) {
+  const token = localStorage.getItem('SessionToken');
+
+  return axios({
+    method: 'get',
+    url: `${API_BASE}/auth/login/`,
+    headers: { Authorization: `Token ${token}` },
+    data: { email, password },
+  })
+    .then(({ data }) => {
+      console.log('data: ', data);
+    });
+}

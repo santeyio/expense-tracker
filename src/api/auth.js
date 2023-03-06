@@ -12,16 +12,17 @@ export function checkIfLoggedIn() {
   });
 }
 
-export function login(email, password) {
+export function login(username, password) {
   const token = localStorage.getItem('SessionToken');
 
   return axios({
-    method: 'get',
+    method: 'post',
     url: `${API_BASE}/auth/login/`,
     headers: { Authorization: `Token ${token}` },
-    data: { email, password },
+    data: { username, password },
   })
     .then(({ data }) => {
       console.log('data: ', data);
+      return data.token;
     });
 }

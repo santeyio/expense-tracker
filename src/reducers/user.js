@@ -1,8 +1,12 @@
 const initialState = {};
 
-export default function (state=initialState, action) {
+function userReducer(state = initialState, action = {}) {
   switch (action.type) {
+    case 'CLEAR':
+      return initialState;
     default:
       return state;
   }
 }
+
+export default userReducer;

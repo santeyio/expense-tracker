@@ -1,12 +1,31 @@
 import React, { useState } from 'react';
+/* eslint-disable */
 
 // api
 import { login } from '../../api/auth';
 
 function Login() {
-  const [ email, setEmail ] = useState();
+  const [ username, setUsername ] = useState();
   const [ password, setPassword ] = useState();
   const [ error, setError ] = useState();
+
+  function attemptLogin() {
+    login(username, password)
+      .then(token => {
+        console.log(token);
+      }).catch(err => {
+        console.log(err);
+      });
+  }
+
+  function handlePasswordChange(e) {
+    const { value } = e.target;
+    if (e.key === 'Enter') {
+      attemptLogin();
+    } else {
+      setPassword(value);
+    }
+  }
 
   return (
     <div className="container-fluid">
@@ -20,30 +39,31 @@ function Login() {
 
           <div className="row">
             <div className="col">
-              <label htmlFor="email" className="form-label">
-                Email
+              <label htmlFor="username" className="form-label">
+                Username
               </label>
               <input
                 className="form-control"
-                id="email"
-                type="email"
-                placeholder="Email"
-                value={email}
+                id="username"
+                placeholder="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </div>
           </div>
 
           <div className="row mt-3">
             <div className="col">
-              <label htmlFor="email" className="form-label">
+              <label htmlFor="password" className="form-label">
                 Password
               </label>
               <input
                 className="form-control"
-                id="email"
+                id="password"
                 type="password"
                 placeholder="Password"
-                value={email}
+                value={password}
+                onChange={handlePasswordChange}
               />
             </div>
           </div>
@@ -56,10 +76,12 @@ function Login() {
             </div>
           )}
 
-          <div className="row mt-3">
+          <div className="row mt-4">
             <div className="col">
               <button
+                role="button"
                 className="btn btn-primary"
+                onClick={attemptLogin}
               >
                 Login
               </button>

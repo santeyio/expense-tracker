@@ -1,21 +1,20 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
-import Wat from './views/Wat';
-import Lol from './views/Lol';
-import Main from './views/Main';
-
+import Dash from './views/dash';
+import LoginRouter from './views/login';
+import { ProtectedRoute } from './components';
 
 import './index.scss'
 
 class App extends Component {
   render() {
+    const PR = ProtectedRoute;
     return (
       <Routes>
-        <Route path="/" element={<Main />} />
-        <Route path="/wat" element={<Wat />} />
-        <Route path="/lol" element={<Lol />} />
+        <Route path="*" element={<LoginRouter />} />
+        <Route path="/dash" element={<PR><Dash /></PR>} />
       </Routes>
     );
   }

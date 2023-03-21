@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 /* eslint-disable */
 
-// api
+// api + utils
 import { login } from '../../api/auth';
+import { parseError } from '../../utils/error';
 
 function Login() {
+  const navigate = useNavigate();
   const [ username, setUsername ] = useState();
   const [ password, setPassword ] = useState();
   const [ error, setError ] = useState();
@@ -12,9 +15,11 @@ function Login() {
   function attemptLogin() {
     login(username, password)
       .then(token => {
-        console.log(token);
-      }).catch(err => {
-        console.log(err);
+        localStorage.setItem('SessionToken', token);
+        navigate('/dash');
+      }).catch(({ response = {} }) => {
+        const { data } = response;
+        setError(parseError(data));
       });
   }
 

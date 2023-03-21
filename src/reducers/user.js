@@ -1,4 +1,5 @@
-const initialState = {};
+const initialState = {
+};
 
 function userReducer(state = initialState, action = {}) {
   switch (action.type) {

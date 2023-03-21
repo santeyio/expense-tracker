@@ -19,8 +19,8 @@ function CheckIfLoggedIn() {
   useEffect(() => {
     check();
   }, []);
-  
-  return <LoadingPage />;  
+
+  return <LoadingPage />;
 }
 
 export default CheckIfLoggedIn;

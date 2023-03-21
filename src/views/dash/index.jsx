@@ -10,22 +10,22 @@ function Main() {
           MAIN.
         </div>
         <div className="col border">
-          <a
-            role="button"
+          <button
+            type="button"
             className="link"
             onClick={() => navigate('/wat')}
           >
             wat
-          </a>
+          </button>
         </div>
         <div className="col border">
-          <a
-            role="button"
+          <button
+            type="button"
             className="link"
             onClick={() => navigate('/lol')}
           >
             lol
-          </a>
+          </button>
         </div>
       </div>
     </div>

@@ -22,7 +22,6 @@ export function login(username, password) {
     data: { username, password },
   })
     .then(({ data }) => {
-      console.log('data: ', data);
       return data.token;
     });
 }

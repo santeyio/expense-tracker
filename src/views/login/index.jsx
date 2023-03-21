@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
-import './index.scss'
+import './index.scss';
 
 import Login from './Login';
 import CheckIfLoggedIn from './CheckIfLoggedIn';
@@ -12,7 +12,7 @@ function LoginRouter() {
       <Route path="/" element={<CheckIfLoggedIn />} />
       <Route path="/login" element={<Login />} />
     </Routes>
-  );  
+  );
 }
 
-export default LoginRouter
+export default LoginRouter;

@@ -33,9 +33,11 @@
       "airbnb"
     ],
     "rules": {
+      "react/prop-types": 0,
       "react-hooks/exhaustive-deps": 0,
       "array-bracket-spacing": 0,
-      "arrow-body-style": 0
+      "arrow-body-style": 0,
+      "arrow-parens": 0
     }
   },
   "browserslist": {

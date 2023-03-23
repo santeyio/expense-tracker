@@ -13,9 +13,9 @@ function Main() {
           <button
             type="button"
             className="link"
-            onClick={() => navigate('/wat')}
+            onClick={() => navigate('/expenditure/add')}
           >
-            wat
+            Add Expenditure
           </button>
         </div>
         <div className="col border">

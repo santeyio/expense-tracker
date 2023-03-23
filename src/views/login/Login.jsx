@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 /* eslint-disable */
 
 // api + utils
 import { login } from '../../api/auth';
+import { getSelf } from '../../api/user';
 import { parseError } from '../../utils/error';
 
 function Login() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [ username, setUsername ] = useState();
   const [ password, setPassword ] = useState();
   const [ error, setError ] = useState();
@@ -16,7 +19,16 @@ function Login() {
     login(username, password)
       .then(token => {
         localStorage.setItem('SessionToken', token);
-        navigate('/dash');
+        getSelf().then(({ data }) => {
+          dispatch({
+            type: 'SET_USER_FIELD',
+            payload: {
+              firstName: data.first_name,
+              lastName: data.last_name,
+            },
+          });
+          navigate('/dash');
+        });
       }).catch(({ response = {} }) => {
         const { data } = response;
         setError(parseError(data));

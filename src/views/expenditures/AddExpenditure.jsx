@@ -1,115 +1,17 @@
 /* eslint-disable react/jsx-no-bind */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { CaretLeftFill } from 'react-bootstrap-icons';
 
 // api
 import { addExpenditure } from '../../api/expenditure';
 
-function TextInput({
-  handleChange,
-  label,
-  name,
-  value,
-}) {
-  return (
-    <div className="mt-3">
-      <label className="form-label" htmlFor={`expenditure-${name}`}>
-        {label}
-      </label>
-      <input
-        className="form-control"
-        id={`expenditure-${name}`}
-        name={name}
-        value={value}
-        onChange={(e) => handleChange(e, name)}
-      />
-    </div>
-  );
-}
-
-function Select({
-  handleChange,
-  label,
-  name,
-  value,
-  options = [],
-}) {
-  return (
-    <div className="mt-3">
-      <label className="form-label" htmlFor={`expenditure-${name}`}>
-        {label}
-      </label>
-      <select
-        className="form-select"
-        id={`expenditure-${name}`}
-        name={name}
-        value={value}
-        onChange={(e) => handleChange(e, name)}
-      >
-        {options.map(option => (
-          <option value={option.value} disabled={option.disabled}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
-}
-
-function DateInput({
-  handleChange,
-  label,
-  name,
-  value,
-}) {
-  return (
-    <div className="mt-3">
-      <label className="form-label" htmlFor={`expenditure-${name}`}>
-        {label}
-      </label>
-      <input
-        type="date"
-        className="form-control"
-        id={`expenditure-${name}`}
-        name={name}
-        value={value}
-        onChange={(e) => handleChange(e, name)}
-      />
-    </div>
-  );
-}
-
-function AddButton() {
-  const { addForm } = useSelector(store => store.expenditure);
-  const [ loading, setLoading ] = useState(false);
-
-  function handleAdd() {
-    setLoading(true);
-    addExpenditure(addForm)
-      .then(data => {
-        console.log(data);
-        setLoading(false);
-      }).catch(err => {
-        console.log(err);
-        setLoading(false);
-      });
-  }
-
-  return (
-    <div className="mt-3">
-      <button
-        type="button"
-        className="btn btn-primary"
-        onClick={handleAdd}
-        disabled={loading}
-      >
-        Add Expenditure
-      </button>
-    </div>
-  );
-}
+// components
+import { TextInput, Select, DateInput } from '../../components/form';
 
 function AddExpense() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
     expenditure: {
@@ -119,10 +21,32 @@ function AddExpense() {
     },
     user: { firstName },
   } = useSelector(store => store);
+  const {
+    category,
+    beneficiary,
+    date,
+    cost,
+    description,
+    store,
+  } = addForm;
+
+  const [ loading, setLoading ] = useState(false);
 
   function handleChange(event, name) {
     const { value } = event.target;
     dispatch({ type: 'UPDATE_EXPENDITURE_FORM', payload: { [name]: value } });
+  }
+
+  function handleAdd() {
+    setLoading(true);
+    addExpenditure(addForm)
+      .then(() => {
+        dispatch({ type: 'CLEAR_EXPENDITURE_FORM' });
+        setLoading(false);
+      }).catch(err => {
+        console.log(err);
+        setLoading(false);
+      });
   }
 
   const categoryOptions = categories.map(c => ({ value: c.id, label: c.name }));
@@ -131,52 +55,81 @@ function AddExpense() {
   const beneficiaryOptions = beneficiaries.map(b => ({ value: b.id, label: b.name }));
   // set current user as the default option for beneficiary
   const currentUserIndex = beneficiaryOptions.findIndex(b => b.label.includes(firstName));
-  const [ currentUser ] = beneficiaryOptions.splice(currentUserIndex, 1);
-  beneficiaryOptions.unshift(currentUser);
+  if (currentUserIndex !== -1) {
+    const [ currentUser ] = beneficiaryOptions.splice(currentUserIndex, 1);
+    beneficiaryOptions.unshift(currentUser);
+  }
+
+  // set a default for the beneficiary in redux
+  useEffect(() => {
+    dispatch({ type: 'UPDATE_EXPENDITURE_FORM', payload: { beneficiary: beneficiaryOptions[0].value } });
+  }, []);
 
   return (
     <div className="container-fluid">
       <div className="row justify-content-center">
         <div className="col-md-6">
+          <div className="mt-3">
+            <button
+              type="button"
+              className="btn btn-outline-secondary"
+              onClick={() => navigate('/dash')}
+            >
+              <CaretLeftFill className="me-2" />
+              Dash
+            </button>
+          </div>
+
           <Select
             label="Category"
             options={categoryOptions}
             name="category"
             handleChange={handleChange}
-            value={addForm.category || ''}
+            value={category || ''}
           />
           <Select
             label="Who is it for?"
             options={beneficiaryOptions}
             name="beneficiary"
             handleChange={handleChange}
-            value={addForm.beneficiary}
+            value={beneficiary}
           />
           <DateInput
             label="Expenditure date"
             name="date"
-            value={addForm.date}
+            value={date}
             handleChange={handleChange}
           />
           <TextInput
             label="Cost"
             name="cost"
-            value={addForm.cost}
+            value={cost}
             handleChange={handleChange}
           />
           <TextInput
             label="Description"
             name="description"
-            value={addForm.description}
+            value={description}
             handleChange={handleChange}
           />
           <TextInput
             label="Store"
             name="store"
-            value={addForm.store}
+            value={store}
             handleChange={handleChange}
           />
-          <AddButton />
+
+          <div className="mt-3">
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={handleAdd}
+              disabled={loading}
+            >
+              Add Expenditure
+            </button>
+          </div>
+
         </div>
       </div>
     </div>

@@ -5,8 +5,8 @@ const initialState = {
 
 function userReducer(state = initialState, action = {}) {
   switch (action.type) {
-    case 'SET_USER_FIELD':
-      return { ...state, ...action.payload };
+    case 'SET_USER_FIELDS':
+      return { ...state, ...action.fields };
     case 'CLEAR':
       return initialState;
     default:

@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { login } from '../../api/auth';
 import { getSelf } from '../../api/user';
 import { parseError } from '../../utils/error';
+import { getExpenditureHistory } from '../../api/expenditure';
 
 function Login() {
   const navigate = useNavigate();
@@ -15,24 +16,26 @@ function Login() {
   const [ password, setPassword ] = useState();
   const [ error, setError ] = useState();
 
-  function attemptLogin() {
-    login(username, password)
-      .then(token => {
-        localStorage.setItem('SessionToken', token);
-        getSelf().then(({ data }) => {
-          dispatch({
-            type: 'SET_USER_FIELD',
-            payload: {
-              firstName: data.first_name,
-              lastName: data.last_name,
-            },
-          });
-          navigate('/dash');
-        });
-      }).catch(({ response = {} }) => {
-        const { data } = response;
-        setError(parseError(data));
-      });
+  async function attemptLogin() {
+    try {
+      // load token
+      const token = await login(username, password);
+      localStorage.setItem('SessionToken', token);
+
+      // load user
+      const user = await getSelf()
+      dispatch({ type: 'SET_USER_FIELDS', fields: user });
+
+      // load expenditures
+      const expenditures = await getExpenditureHistory();
+      console.log('expenditures: ', expenditures);
+      dispatch({ type: 'ADD_EXPENDITURES', expenditures });
+
+      navigate('/dash');
+    } catch (err) {
+      console.log(err);
+      setError(String(err));
+    }
   }
 
   function handlePasswordChange(e) {

@@ -8,7 +8,7 @@ export function getCategories() {
 
   return axios({
     method: 'get',
-    url: `${API_BASE}/budget/category/`,
+    url: `${API_BASE}/expenses/category/`,
     headers: { Authorization: `Token ${token}` },
   })
     .then(({ data }) => data);

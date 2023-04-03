@@ -8,7 +8,7 @@ export function getBeneficiaries() {
 
   return axios({
     method: 'get',
-    url: `${API_BASE}/budget/beneficiary/`,
+    url: `${API_BASE}/expenses/beneficiary/`,
     headers: { Authorization: `Token ${token}` },
   })
     .then(({ data }) => data);

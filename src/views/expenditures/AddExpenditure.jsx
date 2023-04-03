@@ -1,17 +1,16 @@
 /* eslint-disable react/jsx-no-bind */
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { CaretLeftFill } from 'react-bootstrap-icons';
+import { DateTime } from 'luxon';
 
 // api
 import { addExpenditure } from '../../api/expenditure';
 
 // components
-import { TextInput, Select, DateInput } from '../../components/form';
+import { TextInput, Select, DateInput } from '../components/form';
+import { ToDashButton } from '../components';
 
 function AddExpense() {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
     expenditure: {
@@ -53,16 +52,20 @@ function AddExpense() {
   categoryOptions.unshift({ value: '', label: 'Select', disabled: true });
 
   const beneficiaryOptions = beneficiaries.map(b => ({ value: b.id, label: b.name }));
-  // set current user as the default option for beneficiary
+  // set current user as the default option for beneficiary by putting it at the beginning
+  // of the options array
   const currentUserIndex = beneficiaryOptions.findIndex(b => b.label.includes(firstName));
   if (currentUserIndex !== -1) {
     const [ currentUser ] = beneficiaryOptions.splice(currentUserIndex, 1);
     beneficiaryOptions.unshift(currentUser);
   }
 
-  // set a default for the beneficiary in redux
+  // set a default for the beneficiary and date in redux
   useEffect(() => {
-    dispatch({ type: 'UPDATE_EXPENDITURE_FORM', payload: { beneficiary: beneficiaryOptions[0].value } });
+    if (beneficiaries.length) {
+      dispatch({ type: 'UPDATE_EXPENDITURE_FORM', payload: { beneficiary: beneficiaryOptions[0].value } });
+    }
+    dispatch({ type: 'UPDATE_EXPENDITURE_FORM', payload: { date: DateTime.now().toISODate() } });
   }, []);
 
   return (
@@ -70,14 +73,7 @@ function AddExpense() {
       <div className="row justify-content-center">
         <div className="col-md-6">
           <div className="mt-3">
-            <button
-              type="button"
-              className="btn btn-outline-secondary"
-              onClick={() => navigate('/dash')}
-            >
-              <CaretLeftFill className="me-2" />
-              Dash
-            </button>
+            <ToDashButton />
           </div>
 
           <Select

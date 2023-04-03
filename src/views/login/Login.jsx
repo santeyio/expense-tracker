@@ -8,6 +8,10 @@ import { login } from '../../api/auth';
 import { getSelf } from '../../api/user';
 import { parseError } from '../../utils/error';
 import { getExpenditureHistory } from '../../api/expenditure';
+import { getCategories } from '../../api/category';
+import { getBeneficiaries } from '../../api/beneficiary';
+
+import './index.scss';
 
 function Login() {
   const navigate = useNavigate();
@@ -30,6 +34,15 @@ function Login() {
       const expenditures = await getExpenditureHistory();
       console.log('expenditures: ', expenditures);
       dispatch({ type: 'ADD_EXPENDITURES', expenditures });
+
+      // load categories
+      const categories = await getCategories();
+      dispatch({ type: 'SET_EXPENDITURE_KEY', payload: { categories } });
+
+      // load beneficiaries
+      const beneficiaries = await getBeneficiaries()
+      dispatch({ type: 'SET_EXPENDITURE_KEY', payload: { beneficiaries } });
+
 
       navigate('/dash');
     } catch (err) {

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { checkIfLoggedIn } from '../api/auth';
+import { checkIfLoggedIn, logout } from '../../api/auth';
 
 function ProtectedRoute({ children }) {
   const navigate = useNavigate();
@@ -8,7 +8,10 @@ function ProtectedRoute({ children }) {
   useEffect(() => {
     checkIfLoggedIn()
       .then(() => null)
-      .catch(() => navigate('/login'));
+      .catch(() => {
+        logout();
+        navigate('/login');
+      });
   }, []);
 
   return children;

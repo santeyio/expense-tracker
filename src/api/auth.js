@@ -25,3 +25,16 @@ export function login(username, password) {
       return data.token;
     });
 }
+
+export function logout() {
+  const token = localStorage.getItem('SessionToken');
+
+  return axios({
+    method: 'post',
+    url: `${API_BASE}/auth/logout/`,
+    headers: { Authorization: `Token ${token}` },
+  })
+    .then(() => {
+      localStorage.removeItem('SessionToken');
+    });
+}

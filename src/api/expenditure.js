@@ -9,7 +9,7 @@ export function addExpenditure(expenditure) {
 
   return axios({
     method: 'post',
-    url: `${API_BASE}/budget/expenditure/`,
+    url: `${API_BASE}/expenses/expenditure/`,
     headers: { Authorization: `Token ${token}` },
     data: apiFmtExpenditure(expenditure),
   })
@@ -21,7 +21,7 @@ export function getExpenditureHistory() {
 
   return axios({
     method: 'get',
-    url: `${API_BASE}/budget/expenditure/`,
+    url: `${API_BASE}/expenses/expenditure/`,
     headers: { Authorization: `Token ${token}` },
   })
     .then(({ data }) => data.map(e => fmtExpenditure(e)));

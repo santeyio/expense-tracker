@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { checkIfLoggedIn } from '../../api/auth';
 
-import { LoadingPage } from '../../components';
+import { LoadingPage } from '../components';
 
 function CheckIfLoggedIn() {
   const navigate = useNavigate();

@@ -1,18 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 /* eslint-disable */
 import { useSelector, useDispatch } from 'react-redux';
-import { PencilSquare } from 'react-bootstrap-icons';
 
-import { ToDashButton } from '../components';
+// api
+import { updateCategory } from '../../api/category';
+
+// components
+import { ToDashButton, SocketWrapper, EditableListTable } from '../components';
 
 function Categories() {
   const dispatch = useDispatch();
-  const {
-    categories,
-  } = useSelector(store => store.expenditure);
+  const [ saving, setSaving ] = useState(false);
+  const { categories } = useSelector(store => store.expenditure);
+
+  function handleSave(editedCategory, clearCallback = () => {}) {
+    setSaving(true);
+    updateCategory(editedCategory)
+      .then((data) => {
+        const editedIndex = categories.findIndex(e => (e.id === editedCategory.id));
+        const updatedCategories = [ ...categories ]
+        updatedCategories.splice(editedIndex, 1, editedCategory);
+        dispatch({ type: 'SET_EXPENDITURE_KEY', payload: { categories: updatedCategories } });
+        clearCallback();
+      }).finally(() => setSaving(false));
+  }
 
   return (
-    <>
+    <SocketWrapper>
       <div className="row justify-content-center py-4">
         <div className="col-md-6">
           <ToDashButton />
@@ -22,25 +36,17 @@ function Categories() {
       <div className="row justify-content-center py-4">
         <div className="col-md-6">
           Categories
-          <table className="table table-striped">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Edit</th>
-              </tr>
-            </thead>
-            <tbody>
-              {categories.map(category => (
-                <tr>
-                  <td>{category.name}</td>
-                  <td><PencilSquare /></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <EditableListTable
+            textKey="name"
+            pkKey="id"
+            data={categories}
+            handleSave={handleSave}
+            saving={saving}
+            setSaving={setSaving}
+          />
         </div>
       </div>
-    </>
+    </SocketWrapper>
   );
 }
 

@@ -1,15 +1,14 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { ListenForExpenditures } from '../../sockets/expenditure';
-
-import { LogoutButton } from '../components';
+import { SocketWrapper, LogoutButton } from '../components';
 
 function Main() {
   const navigate = useNavigate();
 
   return (
-    <div className="container-fluid">
+    <SocketWrapper>
+
       <div className="row">
         <div className="d-flex col-md-12 justify-content-end">
           <div>
@@ -26,6 +25,13 @@ function Main() {
             onClick={() => navigate('/expenditure/add')}
           >
             Add Expenditure
+          </button>
+          <button
+            type="button"
+            className="btn btn-outline-primary fw-bold ms-4"
+            onClick={() => navigate('/expenditure/insights')}
+          >
+            Insights
           </button>
         </div>
       </div>
@@ -49,8 +55,7 @@ function Main() {
         </div>
       </div>
 
-      <ListenForExpenditures />
-    </div>
+    </SocketWrapper>
   );
 }
 

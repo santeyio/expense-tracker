@@ -8,7 +8,6 @@ import { addExpenditure } from '../../api/expenditure';
 
 // components
 import { TextInput, Select, DateInput } from '../components/form';
-import { ToDashButton } from '../components';
 
 function AddExpense() {
   const dispatch = useDispatch();
@@ -69,66 +68,57 @@ function AddExpense() {
   }, []);
 
   return (
-    <div className="container-fluid">
-      <div className="row justify-content-center">
-        <div className="col-md-6">
-          <div className="mt-3">
-            <ToDashButton />
-          </div>
+    <>
+      <Select
+        label="Category"
+        options={categoryOptions}
+        name="category"
+        handleChange={handleChange}
+        value={category || ''}
+      />
+      <Select
+        label="Who is it for?"
+        options={beneficiaryOptions}
+        name="beneficiary"
+        handleChange={handleChange}
+        value={beneficiary}
+      />
+      <DateInput
+        label="Expenditure date"
+        name="date"
+        value={date}
+        handleChange={handleChange}
+      />
+      <TextInput
+        label="Cost"
+        name="cost"
+        value={cost}
+        handleChange={handleChange}
+      />
+      <TextInput
+        label="Description"
+        name="description"
+        value={description}
+        handleChange={handleChange}
+      />
+      <TextInput
+        label="Store"
+        name="store"
+        value={store}
+        handleChange={handleChange}
+      />
 
-          <Select
-            label="Category"
-            options={categoryOptions}
-            name="category"
-            handleChange={handleChange}
-            value={category || ''}
-          />
-          <Select
-            label="Who is it for?"
-            options={beneficiaryOptions}
-            name="beneficiary"
-            handleChange={handleChange}
-            value={beneficiary}
-          />
-          <DateInput
-            label="Expenditure date"
-            name="date"
-            value={date}
-            handleChange={handleChange}
-          />
-          <TextInput
-            label="Cost"
-            name="cost"
-            value={cost}
-            handleChange={handleChange}
-          />
-          <TextInput
-            label="Description"
-            name="description"
-            value={description}
-            handleChange={handleChange}
-          />
-          <TextInput
-            label="Store"
-            name="store"
-            value={store}
-            handleChange={handleChange}
-          />
-
-          <div className="mt-3">
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={handleAdd}
-              disabled={loading}
-            >
-              Add Expenditure
-            </button>
-          </div>
-
-        </div>
+      <div className="mt-3">
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={handleAdd}
+          disabled={loading}
+        >
+          Add Expenditure
+        </button>
       </div>
-    </div>
+    </>
   );
 }
 

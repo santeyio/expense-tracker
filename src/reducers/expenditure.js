@@ -1,5 +1,6 @@
 const initialState = {
   categories: [],
+  beneficiaries: [],
   addForm: {},
   db: {},
 };

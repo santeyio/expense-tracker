@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import useWebSocket from 'react-use-websocket';
 
 export function handleSocketAuth(event) {

@@ -43,7 +43,6 @@ function Login() {
       const beneficiaries = await getBeneficiaries()
       dispatch({ type: 'SET_EXPENDITURE_KEY', payload: { beneficiaries } });
 
-
       navigate('/dash');
     } catch (err) {
       console.log(err);

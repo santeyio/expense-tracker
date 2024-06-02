@@ -5,11 +5,11 @@ const initialState = {
   db: {},
 };
 
-function expenditureReducer(state = initialState, action = {}) {
+function expensesReducer(state = initialState, action = {}) {
   switch (action.type) {
-    case 'SET_EXPENDITURE_KEY':
+    case 'SET_EXPENSES_KEY':
       return { ...state, ...action.payload };
-    case 'UPDATE_EXPENDITURE_FORM':
+    case 'UPDATE_EXPENSES_FORM':
       return {
         ...state,
         addForm: {
@@ -17,7 +17,7 @@ function expenditureReducer(state = initialState, action = {}) {
           ...action.payload,
         },
       };
-    case 'CLEAR_EXPENDITURE_FORM':
+    case 'CLEAR_EXPENSES_FORM':
       return { ...state, addForm: {} };
     case 'ADD_EXPENDITURE': {
       const { expenditure = {} } = action;
@@ -40,4 +40,4 @@ function expenditureReducer(state = initialState, action = {}) {
   }
 }
 
-export default expenditureReducer;
+export default expensesReducer;

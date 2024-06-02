@@ -1,6 +1,9 @@
 import React from 'react';
 
-import { ListenForExpenditures } from '../../sockets/expenditure';
+import {
+  ListenForExpenditures,
+  ListenForCategories,
+} from '../../sockets/expenses';
 
 function SocketWrapper({ children }) {
   return (
@@ -9,6 +12,7 @@ function SocketWrapper({ children }) {
       {children}
 
       <ListenForExpenditures />
+      <ListenForCategories />
     </div>
   );
 }

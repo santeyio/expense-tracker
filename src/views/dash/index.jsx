@@ -22,14 +22,21 @@ function Main() {
           <button
             type="button"
             className="btn btn-outline-primary fw-bold"
-            onClick={() => navigate('/expenditure/add')}
+            onClick={() => navigate('/expenses/expenditure/add')}
           >
             Add Expenditure
           </button>
           <button
             type="button"
             className="btn btn-outline-primary fw-bold ms-4"
-            onClick={() => navigate('/expenditure/insights')}
+            onClick={() => navigate('/expenses/expenditure/list')}
+          >
+            List
+          </button>
+          <button
+            type="button"
+            className="btn btn-outline-primary fw-bold ms-4"
+            onClick={() => navigate('/expenses/expenditure/insights')}
           >
             Insights
           </button>
@@ -41,14 +48,14 @@ function Main() {
           <button
             type="button"
             className="btn btn-outline-info fw-bold"
-            onClick={() => navigate('/categories')}
+            onClick={() => navigate('/expenses/categories')}
           >
             Categories
           </button>
           <button
             type="button"
             className="btn btn-outline-info fw-bold ms-4"
-            onClick={() => navigate('/beneficiaries')}
+            onClick={() => navigate('/expenses/beneficiaries')}
           >
             Beneficiaries
           </button>

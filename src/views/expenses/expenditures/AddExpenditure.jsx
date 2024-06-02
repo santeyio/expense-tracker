@@ -4,15 +4,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { DateTime } from 'luxon';
 
 // api
-import { addExpenditure } from '../../api/expenditure';
+import { addExpenditure } from '../../../api/expenses';
 
 // components
-import { TextInput, Select, DateInput } from '../components/form';
+import { TextInput, Select, DateInput } from '../../components/form';
 
 function AddExpense() {
   const dispatch = useDispatch();
   const {
-    expenditure: {
+    expenses: {
       addForm = {},
       categories = [],
       beneficiaries = [],
@@ -32,14 +32,14 @@ function AddExpense() {
 
   function handleChange(event, name) {
     const { value } = event.target;
-    dispatch({ type: 'UPDATE_EXPENDITURE_FORM', payload: { [name]: value } });
+    dispatch({ type: 'UPDATE_EXPENSES_FORM', payload: { [name]: value } });
   }
 
   function handleAdd() {
     setLoading(true);
     addExpenditure(addForm)
       .then(() => {
-        dispatch({ type: 'CLEAR_EXPENDITURE_FORM' });
+        dispatch({ type: 'CLEAR_EXPENSES_FORM' });
         setLoading(false);
       }).catch(err => {
         console.log(err);
@@ -62,9 +62,9 @@ function AddExpense() {
   // set a default for the beneficiary and date in redux
   useEffect(() => {
     if (beneficiaries.length) {
-      dispatch({ type: 'UPDATE_EXPENDITURE_FORM', payload: { beneficiary: beneficiaryOptions[0].value } });
+      dispatch({ type: 'UPDATE_EXPENSES_FORM', payload: { beneficiary: beneficiaryOptions[0].value } });
     }
-    dispatch({ type: 'UPDATE_EXPENDITURE_FORM', payload: { date: DateTime.now().toISODate() } });
+    dispatch({ type: 'UPDATE_EXPENSES_FORM', payload: { date: DateTime.now().toISODate() } });
   }, []);
 
   return (

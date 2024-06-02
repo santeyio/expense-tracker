@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import expenditure from './expenditure';
+import expenses from './expenses';
 import user from './user';
 
 export default () => combineReducers({
-  expenditure,
+  expenses,
   user,
 });

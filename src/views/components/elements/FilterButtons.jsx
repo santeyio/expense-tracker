@@ -1,14 +1,20 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 
-function CategoryButton({ category, selectedList, setSelectedList }) {
-  const active = selectedList.includes(category.id);
+function FilterButton({
+  filter,
+  selectedList,
+  setSelectedList,
+  idKey,
+  nameKey,
+}) {
+  const active = selectedList.includes(filter[idKey]);
 
   function handleClick() {
     if (active) { // remove from list
-      setSelectedList(selectedList.filter(c => c !== category.id));
+      setSelectedList(selectedList.filter(f => f !== filter[idKey]));
     } else { // add to list
-      setSelectedList([ ...selectedList, category.id ]);
+      setSelectedList([ ...selectedList, filter[idKey] ]);
     }
   }
 
@@ -18,19 +24,27 @@ function CategoryButton({ category, selectedList, setSelectedList }) {
       className={`btn ${active ? 'btn-success' : 'btn-outline-primary'} me-2 mt-2`}
       onClick={handleClick}
     >
-      {category.name}
+      {filter[nameKey]}
     </button>
   );
 }
 
-function CategoryFilters({ categories, setSelectedList, selectedList }) {
+function FilterButtons({
+  filterList,
+  setSelectedList,
+  selectedList,
+  idKey = 'id',
+  nameKey = 'name',
+}) {
   return (
     <div className="row">
       <div className="col">
-        {categories.map(category => (
-          <CategoryButton
+        {filterList.map(filter => (
+          <FilterButton
             selectedList={selectedList}
-            category={category}
+            filter={filter}
+            idKey={idKey}
+            nameKey={nameKey}
             setSelectedList={setSelectedList}
           />
         ))}
@@ -46,4 +60,4 @@ function CategoryFilters({ categories, setSelectedList, selectedList }) {
   );
 }
 
-export default CategoryFilters;
+export default FilterButtons;

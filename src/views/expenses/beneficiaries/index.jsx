@@ -3,15 +3,15 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 // api
-import { updateCategory } from '../../api/category';
+import { updateCategory } from '../../../api/category';
 
 // components
-import { ToDashButton, SocketWrapper, EditableListTable } from '../components';
+import { ToDashButton, SocketWrapper, EditableListTable } from '../../components';
 
-function Categories() {
+function Beneficiaries() {
   const dispatch = useDispatch();
   const [ saving, setSaving ] = useState(false);
-  const { categories } = useSelector(store => store.expenditure);
+  const { categories } = useSelector(store => store.expenses);
 
   function handleSave(editedCategory, clearCallback = () => {}) {
     setSaving(true);
@@ -20,7 +20,7 @@ function Categories() {
         const editedIndex = categories.findIndex(e => (e.id === editedCategory.id));
         const updatedCategories = [ ...categories ]
         updatedCategories.splice(editedIndex, 1, editedCategory);
-        dispatch({ type: 'SET_EXPENDITURE_KEY', payload: { categories: updatedCategories } });
+        dispatch({ type: 'SET_EXPENSES_KEY', payload: { categories: updatedCategories } });
         clearCallback();
       }).finally(() => setSaving(false));
   }
@@ -50,4 +50,4 @@ function Categories() {
   );
 }
 
-export default Categories;
+export default Beneficiaries;

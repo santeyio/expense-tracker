@@ -4,41 +4,41 @@ import { useSelector } from 'react-redux';
 import { DateTime } from 'luxon';
 
 // components
-import { Table, CategoryFilters } from '../../components';
-import { TextInput } from '../../components/form';
+import { Table, FilterButtons } from '../../../components';
+import { TextInput, DateInput } from '../../../components/form';
 
 // utils
-import { debounced } from '../../../utils/general';
-import { toCurrency } from '../../../utils/prettify';
+import { debounced } from '../../../../utils/general';
+import { toCurrency } from '../../../../utils/prettify';
+import { filterExpenses } from '../../../../utils/expenses';
 
-function filterExpenses({
-  data,
-  filterString,
-  startFilter,
-  endFilter,
-  categoryFilter,
-}) {
-  let filteredData = data;
-  if (filterString) {
-    filteredData = filteredData.filter(entry => {
-      if (entry.store.toLowerCase().includes(filterString.toLowerCase())) return true;
-      if (entry.description.toLowerCase().includes(filterString.toLowerCase())) return true;
-      if (entry.cost.toLowerCase().includes(filterString.toLowerCase())) return true;
-      return false;
-    });
-  }
-  console.log('categoryFilter: ', categoryFilter);
-  if (categoryFilter.length) {
-    filteredData = filteredData.filter(entry => categoryFilter.includes(entry.category));
-  }
-  return filteredData;
+function DateFilterLabel({ closeAction, label }) {
+  return (
+    <>
+      {label}
+      <button
+        type="button"
+        className="btn btn-sm btn-link"
+        onClick={() => closeAction()}
+        style={{
+          paddingLeft: '.5rem',
+          paddingTop: '0rem',
+          paddingBottom: '0rem',
+          paddingRight: '0rem',
+        }}
+      >
+        Clear
+      </button>
+    </>
+  );
 }
 
-function Insights() {
+function List() {
   const {
     db: expenses,
     categories,
-  } = useSelector(store => store.expenditure);
+    beneficiaries,
+  } = useSelector(store => store.expenses);
 
   const [ startFilter, setStartFilter ] = useState();
   const [ endFilter, setEndFilter ] = useState();
@@ -48,6 +48,7 @@ function Insights() {
   const categoryFormatter = (data) => categories.find(c => (c.id === data.category)).name;
   const dateFormatter = (date) => DateTime.fromISO(date).toLocaleString();
   const costFormatter = (cost) => toCurrency(cost);
+  // const beneficiaryFormatter = (data) => beneficiaries.find(b => (b.id === data.beneficiary)).name;
 
   const schema = {
     cols: [
@@ -55,10 +56,6 @@ function Insights() {
         header: 'Expense',
         field: 'cost',
         formatter: costFormatter,
-      },
-      {
-        header: 'Store',
-        field: 'store',
       },
       {
         header: 'Description',
@@ -81,12 +78,12 @@ function Insights() {
   const filteredData = filterExpenses({
     data,
     filterString,
-    startFilter,
-    endFilter,
+    dateFilterStart: startFilter,
+    dateFilterEnd: endFilter,
     categoryFilter,
   });
 
-  const filteredTotal = filteredData.reduce((accumulator, item) => Number(item.cost) + accumulator, 0);
+  const filteredTotal = filteredData.reduce((accumulator, item) => (Number(item.cost) + accumulator), 0);
 
   function handleFilterChange(e) {
     const { value } = e.target;
@@ -109,15 +106,44 @@ function Insights() {
         <div className="col-md-6">
           <TextInput
             value={filterString}
+            label="Search"
             placeholder="expense / store / description"
             handleChange={(e) => handleFilterChange(e)}
             handleClear={() => handleClearFilter()}
           />
         </div>
+
+        <div className="col-md-3">
+          <DateInput
+            label={(
+              <DateFilterLabel
+                closeAction={() => setStartFilter(undefined)}
+                label="Start Date"
+              />
+            )}
+            value={startFilter ? startFilter.toISODate() : undefined}
+            name="start-filter"
+            handleChange={(e) => setStartFilter(DateTime.fromISO(e.target.value))}
+          />
+        </div>
+
+        <div className="col-md-3">
+          <DateInput
+            label={(
+              <DateFilterLabel
+                closeAction={() => setEndFilter(undefined)}
+                label="End Date"
+              />
+            )}
+            value={endFilter ? endFilter.toISODate() : undefined}
+            name="end-filter"
+            handleChange={(e) => setEndFilter(DateTime.fromISO(e.target.value))}
+          />
+        </div>
       </div>
 
-      <CategoryFilters
-        categories={categories}
+      <FilterButtons
+        filterList={categories}
         selectedList={categoryFilter}
         setSelectedList={setCategoryFilter}
       />
@@ -138,4 +164,4 @@ function Insights() {
   );
 }
 
-export default Insights;
+export default List;

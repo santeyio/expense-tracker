@@ -8,9 +8,11 @@ function DateInput({
 }) {
   return (
     <div className="mt-3">
-      <label className="form-label" htmlFor={`expenditure-${name}`}>
-        {label}
-      </label>
+      {label && (
+        <label className="form-label" htmlFor={`expenditure-${name}`}>
+          {label}
+        </label>
+      )}
       <input
         type="date"
         className="form-control"

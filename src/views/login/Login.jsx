@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { login } from '../../api/auth';
 import { getSelf } from '../../api/user';
 import { parseError } from '../../utils/error';
-import { getExpenditureHistory } from '../../api/expenditure';
+import { getExpenditureHistory } from '../../api/expenses';
 import { getCategories } from '../../api/category';
 import { getBeneficiaries } from '../../api/beneficiary';
 
@@ -37,11 +37,11 @@ function Login() {
 
       // load categories
       const categories = await getCategories();
-      dispatch({ type: 'SET_EXPENDITURE_KEY', payload: { categories } });
+      dispatch({ type: 'SET_EXPENSES_KEY', payload: { categories } });
 
       // load beneficiaries
       const beneficiaries = await getBeneficiaries()
-      dispatch({ type: 'SET_EXPENDITURE_KEY', payload: { beneficiaries } });
+      dispatch({ type: 'SET_EXPENSES_KEY', payload: { beneficiaries } });
 
       navigate('/dash');
     } catch (err) {

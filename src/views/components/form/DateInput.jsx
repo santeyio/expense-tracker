@@ -3,6 +3,7 @@ import React from 'react';
 function DateInput({
   handleChange,
   label,
+  clearAction,
   name,
   value,
 }) {
@@ -11,6 +12,21 @@ function DateInput({
       {label && (
         <label className="form-label" htmlFor={`expenditure-${name}`}>
           {label}
+          {clearAction && (
+            <button
+              type="button"
+              className="btn btn-sm btn-link"
+              onClick={() => clearAction()}
+              style={{
+                paddingLeft: '.5rem',
+                paddingTop: '0rem',
+                paddingBottom: '0rem',
+                paddingRight: '0rem',
+              }}
+            >
+              Clear
+            </button>
+          )}
         </label>
       )}
       <input

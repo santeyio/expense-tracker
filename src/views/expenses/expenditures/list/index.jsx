@@ -4,34 +4,17 @@ import { useSelector } from 'react-redux';
 import { DateTime } from 'luxon';
 
 // components
-import { Table, FilterButtons } from '../../../components';
-import { TextInput, DateInput } from '../../../components/form';
+import {
+  Table,
+  FilterButtons,
+  TextInput,
+  DateInput,
+} from '../../../components';
 
 // utils
 import { debounced } from '../../../../utils/general';
 import { toCurrency } from '../../../../utils/prettify';
 import { filterExpenses } from '../../../../utils/expenses';
-
-function DateFilterLabel({ closeAction, label }) {
-  return (
-    <>
-      {label}
-      <button
-        type="button"
-        className="btn btn-sm btn-link"
-        onClick={() => closeAction()}
-        style={{
-          paddingLeft: '.5rem',
-          paddingTop: '0rem',
-          paddingBottom: '0rem',
-          paddingRight: '0rem',
-        }}
-      >
-        Clear
-      </button>
-    </>
-  );
-}
 
 function List() {
   const {
@@ -60,6 +43,10 @@ function List() {
       {
         header: 'Description',
         field: 'description',
+      },
+      {
+        header: 'Store',
+        field: 'store',
       },
       {
         header: 'Category',
@@ -115,12 +102,8 @@ function List() {
 
         <div className="col-md-3">
           <DateInput
-            label={(
-              <DateFilterLabel
-                closeAction={() => setStartFilter(undefined)}
-                label="Start Date"
-              />
-            )}
+            clearAction={() => setStartFilter(undefined)}
+            label="Start Date"
             value={startFilter ? startFilter.toISODate() : undefined}
             name="start-filter"
             handleChange={(e) => setStartFilter(DateTime.fromISO(e.target.value))}
@@ -129,12 +112,8 @@ function List() {
 
         <div className="col-md-3">
           <DateInput
-            label={(
-              <DateFilterLabel
-                closeAction={() => setEndFilter(undefined)}
-                label="End Date"
-              />
-            )}
+            clearAction={() => setEndFilter(undefined)}
+            label="End Date"
             value={endFilter ? endFilter.toISODate() : undefined}
             name="end-filter"
             handleChange={(e) => setEndFilter(DateTime.fromISO(e.target.value))}

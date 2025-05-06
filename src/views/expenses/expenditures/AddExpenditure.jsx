@@ -7,7 +7,7 @@ import { DateTime } from 'luxon';
 import { addExpenditure } from '../../../api/expenses';
 
 // components
-import { TextInput, Select, DateInput } from '../../components/form';
+import { TextInput, Select, DateInput } from '../../components';
 
 function AddExpense() {
   const dispatch = useDispatch();

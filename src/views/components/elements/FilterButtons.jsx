@@ -41,6 +41,7 @@ function FilterButtons({
       <div className="col">
         {filterList.map(filter => (
           <FilterButton
+            key={filter[idKey]}
             selectedList={selectedList}
             filter={filter}
             idKey={idKey}

@@ -1,13 +1,14 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { DateTime } from 'luxon';
 
 // utils
 import { filterExpenses } from '../../../../utils/expenses';
 import { toCurrency } from '../../../../utils/prettify';
 
 // components
-import { Table, FilterButtons } from '../../../components';
+import { Table, FilterButtons, DateInput } from '../../../components';
 
 function calculateCategoryTotalsByBeneficiary({
   data,
@@ -23,7 +24,7 @@ function calculateCategoryTotalsByBeneficiary({
       const filteredData = filterExpenses({
         data,
         categoryFilter: [ category.id ],
-        beneficiaryFilter: bene,
+        beneficiaryFilter: bene.id,
       });
       const sum = filteredData.reduce((accumulator, item) => (Number(item.cost) + accumulator), 0);
       categoryRow[`bene${bene.id}`] = sum;
@@ -64,8 +65,8 @@ function Insights() {
   const data = Object.values(expenses);
   const filteredData = filterExpenses({
     data,
-    dateStartFilter: startFilter,
-    dateEndFilter: endFilter,
+    dateFilterStart: startFilter,
+    dateFilterEnd: endFilter,
   });
   const summedData = calculateCategoryTotalsByBeneficiary({
     data: filteredData,
@@ -75,6 +76,26 @@ function Insights() {
 
   return (
     <>
+      <div className="row mt-4">
+        <h5>Date Range</h5>
+        <div className="col">
+          <DateInput
+            clearAction={() => setStartFilter(undefined)}
+            label="Start Date"
+            value={startFilter ? startFilter.toISODate() : undefined}
+            name="start-filter"
+            handleChange={(e) => setStartFilter(DateTime.fromISO(e.target.value))}
+          />
+          <DateInput
+            clearAction={() => setEndFilter(undefined)}
+            label="End Date"
+            value={endFilter ? endFilter.toISODate() : undefined}
+            name="end-filter"
+            handleChange={(e) => setEndFilter(DateTime.fromISO(e.target.value))}
+          />
+        </div>
+      </div>
+
       <div className="row mt-4">
         <h5>Beneficiaries</h5>
         <FilterButtons
